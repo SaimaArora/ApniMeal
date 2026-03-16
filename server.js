@@ -1,7 +1,11 @@
 const express = require("express"); //loads express
 const cors = require("cors");
 require("dotenv").config();
+const connectDB = require("./config/db"); //import connection function
+
 const app = express(); //initialize the server, middleware routes connect to app
+
+connectDB(); // connect dtbs, runs when server starts. Start server -> connect mongo -> api ready
 
 //Middleware
 app.use(cors()); //allow frontend to call backend, allows cross-origin requests
