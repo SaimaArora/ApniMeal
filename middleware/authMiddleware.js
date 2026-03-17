@@ -30,4 +30,15 @@ const protect = async(req, res, next)=>{
         });
     }
 };
-module.exports = { protect };
+const authorizeRoles = (...roles)=>{ //call like("student", ("cook"))
+    return (req, res, next) =>{ //route->protect->authorizeRoles->controller
+        if(!roles.includes(req.user.role)) {
+            return res.status(403).json({
+                message:"Access denied: insufficient permissions"
+            });
+        }
+        next();
+    };
+};
+
+module.exports = { protect , authorizeRoles};
