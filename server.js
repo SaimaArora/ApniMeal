@@ -4,7 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/db"); //import connection function
 const userRoutes = require("./routes/userRoutes"); //import user routes
 const foodRoutes = require("./routes/foodRoutes");
-
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express(); //initialize the server, middleware routes connect to app
 
@@ -17,6 +17,8 @@ app.use(express.json()); //allow server to read json from req
 //Routes - means router.post("/register") becomes post /spi/users/register
 app.use("/api/users", userRoutes); //when request starts with /api/users, forward to userRoutes, which has /register route defined
 app.use("/api/foods", foodRoutes);
+app.use("/api/orders", orderRoutes);
+
 //test routes
 app.get("/", (req, res)=>{
     res.send("Api is running..");
