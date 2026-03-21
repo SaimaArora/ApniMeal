@@ -37,12 +37,37 @@ exports.getFoods = async(req, res) =>{
 //filter veg/nonveg
 exports.getFoodsByFilter = async (req, res) =>{
     try{
-        const { isVeg } = req.query; //query filter: filter?isVeg=true
+        const { isVeg, minPrice, maxPrice } = req.query; //query filter: filter?isVeg=true
         const filter = {};
         if(isVeg !== undefined){
             filter.isVeg = isVeg === "true";
         }
+        if(minPrice || maxPrice) {
+            filter.price={};
+            if(minPrice) filter.price.$gte = Number(minPrice);
+            if(maxPrice) filter.price.$lte = Number(maxPrice);
+        }
         const foods = await Food.find(filter);
+        res.json(foods);
+    } catch(error) {
+        res.status(500).json({
+            message:error.message
+        });
+    }
+};
+
+//search food
+exports.searchFood = async (req, res) =>{
+    try{
+        const {keyword} = req.query; //get /api/foods/search?keyword=parantha
+        if(!keyword) {
+            return res.status(400).json({
+                message:"Search keyword is required"
+            });
+        }
+        const foods = await Food.find({
+            $text: { $search: keyword } //search in title+description
+        }).populate("cook", "name");
         res.json(foods);
     } catch(error) {
         res.status(500).json({

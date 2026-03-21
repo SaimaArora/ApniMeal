@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-    createFood, getFoods, getFoodsByFilter
+    createFood, getFoods, getFoodsByFilter, searchFoods
 } = require("../controllers/foodController");
 const { protect, authorizeRoles } = require("../middleware/authMiddleware");
 
@@ -12,5 +12,7 @@ router.post("/",protect, authorizeRoles("cook"), createFood);
 router.get("/", getFoods);
 //filter food
 router.get("/filter", getFoodsByFilter);
+//search route
+router.get("/search", searchFoods);
 
 module.exports = router;
