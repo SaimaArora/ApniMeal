@@ -33,7 +33,7 @@ const foodSchema = new mongoose.Schema(
         timestamps: true
     }
 );
-//before model creation add index
+//before model creation add index - without it, slow search and inefficient, unoptimized queries
 foodSchema.index({title: "text", description:"text"});
 const Food = mongoose.model("Food", foodSchema);
 module.exports = Food;

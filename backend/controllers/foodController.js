@@ -46,6 +46,7 @@ exports.getFoodsByFilter = async (req, res) =>{
             filter.price={};
             if(minPrice) filter.price.$gte = Number(minPrice);
             if(maxPrice) filter.price.$lte = Number(maxPrice);
+            //GET /api/foods/filter?isVeg=true&minPrice=20&maxPrice=100
         }
         const foods = await Food.find(filter);
         res.json(foods);

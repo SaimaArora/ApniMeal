@@ -8,6 +8,6 @@ const router = express.Router(); //create new router object, define routes on it
 router.post("/register", registerUser); //when POST request is made to /api/users/register, call registerUser controller function
 router.post("/login", loginUser); //post /api/users/login
 
-router.get("/profile", protect, getUserProfile);
+router.get("/profile", protect, getUserProfile); //request->protect->getuserprofile->response
 
 module.exports = router; //export the router object to use in server.js
