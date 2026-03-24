@@ -23,7 +23,7 @@ app.use("/api/orders", orderRoutes);
 app.get("/", (req, res)=>{
     res.send("Api is running..");
 });
-const port = process.env.port || 5000;
+const port = process.env.port || 3000;
 app.listen(port, ()=>{
     console.log(`Server is running on port${port}`); //start the backend server, listen on port 5000 or env port
 });
