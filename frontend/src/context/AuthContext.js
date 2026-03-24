@@ -1,9 +1,15 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext(); //creates global state
 
 export const AuthProvider = ({ children })=>{
     const [user, setUser] = useState(null);
+    useEffect(()=>{
+        const storedUser = localStorage.getItem("user");
+        if(storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    },[]); //page refresh, user still logged in now
     const login = (data)=>{ //stores user in react state and browser storage(persistent)
         setUser(data);
         localStorage.setItem("user", JSON.stringify(data));

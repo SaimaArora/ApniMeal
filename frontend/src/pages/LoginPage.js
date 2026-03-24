@@ -1,9 +1,12 @@
 import { useState, useContext } from "react";
 import API from "../services/api"
 import {AuthContext} from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 function LoginPage() {
     const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         email:"",
         password:""
@@ -17,7 +20,11 @@ function LoginPage() {
         try{
             const res = await API.post("/users/login", form);
             login(res.data);
-            alert("Login Successfull");
+            if(res.data.user.role === "student") {
+                navigate("/student-dashboard");
+            } else {
+                navigate("/cook-dashboard");
+            }
         } catch(error) {
             alert(error.response?.data?.message || "Something is wrong");
         }
