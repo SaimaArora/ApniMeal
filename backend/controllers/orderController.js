@@ -70,19 +70,55 @@ const updateOrderStatus = asyncHandler(async(req, res)=> {
             res.status(403);
             throw new Error("Not authorized to update this order");
         }
+        const validTransitions = { //allowed flow
+            pending:["accepted"], 
+            accepted:["preparing"],
+            preparing: ["delivered"],
+            delivered:[]
+        };
+        const currentStatus = order.status;
+        if(!validTransitions[currentStatus].includes(status)) {
+            res.status(400);
+            throw new Error(`Invalid status transition from ${currentStatus} to ${status}`);
+        }
 
         order.status = status || order.status;
         const updatedOrder = await order.save();
         res.status(200).json({
             success: true,
-            message: `Order status updated to ${status}`,
             order: updatedOrder
         });
+});
+
+const cancelOrder = asyncHandler(async(req, res)=>{
+    const order = await Order.findById(req.params.id);
+    if(!order) {
+        res.status(404);
+        throw new Error("Order not Found");
+    }
+    //only students can cancel
+    if(order.student.toString() !== req.user._id.toString()) {
+        res.status(403);
+        throw new Error("Not authorized to cancel this order");
+    }
+    //only pending orders can be cancelled
+    if(order.status !== "pending"){
+        res.status(400);
+        throw new Error("Only pending orders can be cancelled");
+    }
+    order.status = "cancelled";
+    await order.save();
+    res.json({
+        success: true,
+        message:"Order cancelled successfully",
+        order
+    });
 });
 
 module.exports = {
     createOrder,
     getMyOrders,
     getCookOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    cancelOrder
 };
