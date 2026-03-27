@@ -4,8 +4,8 @@ const generateToken = require("../utils/generateToken");
 
 const asyncHandler = require("../utils/asyncHandler"); //for thrown errors
 
-//register new user
-const registerUser = async(req, res) => {
+//register new user - post /api/users/register
+const registerUser = asyncHandler(async(req, res) => {
         const {name, email, password, role} = req.body; //extract user data, parses it using app.use(express.json()) middleware
         //check if user exists
         const userExists = await User.findOne({email}); //find user with this email
@@ -21,27 +21,35 @@ const registerUser = async(req, res) => {
         const currUser = await User.create({
             name, email, password: hashedPassword, role //save user in dtbs
         });
-        res.status(201).json({ //201 - resource created
-            success: true,
-            user
-        });
-};
+        if(currUser){
+            res.status(201).json({
+                success: true,
+                user: {
+                    _id: currUser._id,
+                    name: currUser.name,
+                    email: currUser.email,
+                    role: currUser.role,
+                    token: generateToken(currUser._id), //login immediately
+                }
+            });
+        } else{
+        res.status(400);
+        throw new Error ("Invalid user data");
+    }
+});
 
-//Login user
-const loginUser = async (req, res) =>{
-    try{
+//Login user - post /api/users/login
+const loginUser = asyncHandler(async (req, res) =>{
         const { email, password } = req.body;
         const user = await User.findOne({ email }); //check if user exists
         if(!user) {
-            return res.status(400).json({
-                message : "Invalid email or password"
-            });
+            res.status(400);
+            throw new Error("Invalid email or password");
         }
         const isMatch = await bcrypt.compare(password, user.password); //safely compare input plain text to hashsed db password
         if(!isMatch) {
-            return res.status(400).json({
-                message: "Invalid Password or email"
-            });
+            res.status(400);
+            throw new Error("Invalid Password or email");
         }
         //generate token
         const token = generateToken(user._id); //create jwt using user id
@@ -55,20 +63,19 @@ const loginUser = async (req, res) =>{
                 role:user.role
             }
         });
-    }
-    catch(error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
+});
 
-const getUserProfile = async (req, res)=>{
+const getUserProfile = asyncHandler(async (req, res)=>{
+    if(req.user) {
     res.json({
         message:"User profile fetched",
         user: req.user
     });
-};
+    } else {
+        res.status(404);
+        throw new Error("User not Found");
+    }
+});
 
 module.exports = {
     registerUser,

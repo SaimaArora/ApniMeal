@@ -1,17 +1,16 @@
 const Order = require("../models/Order");
 const Food = require("../models/Food");
+const asyncHandler = require("../utils/asyncHandler"); 
 
-//place order - student only
-async function createOrder (req, res) {
-    try{
+//place order - student only - post /api/orders
+const createOrder  = asyncHandler(async(req, res)=> {
         const { foodId, quantity } = req.body;
         //find food
         const food = await Food.findById(foodId);
 
         if(!food) {
-            return res.status(404).json({
-                message:"Food item not found"
-            });
+            res.status(404);
+            throw new Error("Food item not found");
         }
 
         //calculate total price
@@ -25,77 +24,61 @@ async function createOrder (req, res) {
         });
 
         res.status(201).json({
+            succes: true,
             message: "Order placed successfully",
             order
         });
+});
 
-    } catch(error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
-
-//get student orders
-async function getMyOrders(req, res) {
-    try{
+//get student orders - get /api/orders/my-orders
+const getMyOrders = asyncHandler(async(req, res)=> {
         const orders = await Order.find({
             student: req.user._id
         })
         .populate("foodItem")
         .populate("cook", "name");
-        res.json(orders);
-    } catch(error) {
-        res.status(500).json({
-            message: error.message
+        res.status(200).json({
+            success: true,
+            count: orders.length,
+            orders
         });
-    }
-};
+});
 
-//get cook orders
-async function getCookOrders (req, res) {
-    try{
+//get cook orders - get /api/orders/cookorders
+const getCookOrders = asyncHandler(async(req, res)=> {
         const orders = await Order.find({ cook: req.user._id})
         .populate("foodItem")
         .populate("student", "name"); //to fetch related data
-        res.json(orders);
-    } catch(error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
 
-//update order status
-async function updateOrderStatus (req, res) {
-    try{
+        res.status(200).json({
+            success: true,
+            count: orders.length,
+            orders
+        });
+});
+
+//update order status - put api/orders/:id/status
+const updateOrderStatus = asyncHandler(async(req, res)=> {
         const { status } = req.body;
         const order = await Order.findById(req.params.id);
         if(!order) {
-            return res.status(404).json({
-                message: "Order not found"
-            });
+            res.status(404);
+            throw new Error("Order not Found");
         }
         //ensure assigned cook can update
         if (order.cook.toString() !== req.user._id.toString()) { //so other cooks dont modify data, assigned cook can update
-            return res.status(403).json({
-                message: "Not authorized to update this order"
-            });
+            res.status(403);
+            throw new Error("Not authorized to update this order");
         }
 
-        order.status = status;
-
-        await order.save();
-        res.json({
-            message: "Order status updated", 
-            order
+        order.status = status || order.status;
+        const updatedOrder = await order.save();
+        res.status(200).json({
+            success: true,
+            message: `Order status updated to ${status}`,
+            order: updatedOrder
         });
-    } catch(error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-};
+});
 
 module.exports = {
     createOrder,

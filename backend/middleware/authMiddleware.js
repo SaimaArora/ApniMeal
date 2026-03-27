@@ -33,9 +33,8 @@ const protect = async(req, res, next)=>{
 const authorizeRoles = (...roles)=>{ //call like("student", ("cook"))
     return (req, res, next) =>{ //route->protect->authorizeRoles->controller
         if(!roles.includes(req.user.role)) {
-            return res.status(403).json({
-                message:"Access denied: insufficient permissions"
-            });
+            return res.status(403);
+            throw new Error(`Role (${req.user.role}) is not allowed to access the resource`);
         }
         next();
     };
