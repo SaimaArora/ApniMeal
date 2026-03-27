@@ -2,16 +2,16 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 
+const asyncHandler = require("../utils/asyncHandler"); //for thrown errors
+
 //register new user
 const registerUser = async(req, res) => {
-    try{
         const {name, email, password, role} = req.body; //extract user data, parses it using app.use(express.json()) middleware
         //check if user exists
         const userExists = await User.findOne({email}); //find user with this email
         if(userExists) {
-            return res.status(400).json({
-                message: "User already exists" //reject signup
-            });
+            res.status(400);
+            throw new Error("User already exists");
         }
         //hashPassword - make it unique and secure
         const salt = await bcrypt.genSalt(10); //generate salt with 10 rounds, more rounds = more secure but slower
@@ -22,20 +22,9 @@ const registerUser = async(req, res) => {
             name, email, password: hashedPassword, role //save user in dtbs
         });
         res.status(201).json({ //201 - resource created
-            message: "User registered successfully",
-            user :{
-                id: currUser._id,
-                name:currUser.name,
-                email:currUser.email,
-                role:currUser.role
-            }
+            success: true,
+            user
         });
-    
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
 };
 
 //Login user
