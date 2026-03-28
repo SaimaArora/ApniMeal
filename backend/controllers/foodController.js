@@ -22,7 +22,7 @@ exports.createFood = asyncHandler(async (req, res)=>{
 //get all food - get /api/foods
 exports.getFoods = asyncHandler(async(req, res) =>{
 
-        const foods = await Food.find().populate("cook", "name email"); //to get "cook":{ name:"abc", email:"abc@gmail" }
+        const foods = await Food.find({available: true }).populate("cook", "name email"); //to get "cook":{ name:"abc", email:"abc@gmail" }
         res.status(200).json({
             success: true,
             count: foods.length,
@@ -30,10 +30,21 @@ exports.getFoods = asyncHandler(async(req, res) =>{
         });
 });
 
+exports.getMyFoods = asyncHandler(async(req, res) => {
+    const foods = await Food.find({cook : req.user._id});
+    res.json({
+        success: true,
+        foods
+    });
+});
+
+
 //filter veg/nonveg - get /api/foods/filter
 exports.getFoodsByFilter = asyncHandler(async (req, res) =>{
         const { isVeg, minPrice, maxPrice } = req.query; //query filter: filter?isVeg=true
-        const filter = {};
+        const filter = {
+            available: true
+        };
         if(isVeg !== undefined){
             filter.isVeg = isVeg === "true";
         }
@@ -59,7 +70,8 @@ exports.searchFood = asyncHandler(async (req, res) =>{
             throw new Error("Search keyword is required");
         }
         const foods = await Food.find({
-            $text: { $search: keyword } //search in title+description
+            $text: { $search: keyword }, //search in title+description
+            available: true
         }).populate("cook", "name");
         res.status(200).json({
             success: true,
