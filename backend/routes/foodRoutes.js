@@ -5,6 +5,7 @@ const {
 } = require("../controllers/foodController");
 const { protect, authorizeRoles } = require("../middleware/authMiddleware");
 const { validate } = require("../middleware/validationMiddleware");
+const { getMyFoods } = require("../controllers/foodController");
 
 const router = express.Router();
 
@@ -20,12 +21,16 @@ router.put("/:id", protect, authorizeRoles("cook"), updateFood);
 
 router.delete("/:id", protect, authorizeRoles("cook"), deleteFood);
 //public routes
+//get /api/foods/my-foods
+router.get("/my-foods", protect, authorizeRoles("cook"), getMyFoods);
+
 //get all food
 router.get("/", getFoods);
 //filter food
 router.get("/filter", getFoodsByFilter);
 //search route
 router.get("/search", searchFood);
+
 
 module.exports = router;
 // POST   /api/foods        → create food

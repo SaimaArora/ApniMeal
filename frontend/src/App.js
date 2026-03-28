@@ -5,6 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import CookDashboard from "./pages/CookDashboard";
+import CartPage from "./pages/CartPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
@@ -22,11 +23,17 @@ function App() {
         {/* Student dashboard */}
         <Route path="/student-dashboard" element={
           <ProtectedRoute>
-            {user?.user?.role === "student"?(
+            {user?.user?.role === "student"?( //login response is user:{ role:"student"}
               <StudentDashboard/>
             ): (
               <h2>Access Denied</h2>
             )}
+          </ProtectedRoute>
+        }/>
+        {/* Add to cart */}
+        <Route path="/cart" element={
+          <ProtectedRoute>
+            {user?.user?.role==="student" ? <CartPage/>: <h2>Access Denied</h2>}
           </ProtectedRoute>
         }/>
         {/* Cook dashboard */}
