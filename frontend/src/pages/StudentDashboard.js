@@ -2,30 +2,40 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import FoodCard from "../components/FoodCard";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function StudentDashboard() {
+    const [error, setError] = useState(null);
     const [foods, setFoods] = useState([]); //store food data
     const [search, setSearch] = useState("");
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
     const activeOrders = orders.filter(
         (o)=>o.status !== "delivered"
     );
     const navigate = useNavigate();
     const fetchOrders = async()=>{
         try{
+            setLoading(true);
             const res = await API.get("/orders/my-orders");
             setOrders(res.data.orders);
         } catch(error) {
             console.error(error);
+        } finally{
+            setLoading(false);
         }
     };
     //fetch food
     const fetchFoods = async ()=>{
         try{
+            setLoading(true);
+            setError(null);
             const res = await API.get("/foods");
             setFoods(res.data.foods);
         } catch(error) {
-            console.error(error);
+            setError("Failed to fetch foods.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -51,9 +61,9 @@ function StudentDashboard() {
                 foodId,
                 quantity:1
             });
-            alert("Order placed!");
+            toast.success("Order placed!");
         } catch(error) {
-            alert(error.response.data.message);
+            toast.error(error.response.data.message);
         }
     };
 
@@ -64,13 +74,22 @@ function StudentDashboard() {
                 foodId,
                 quantity: 1
             });
-            navigate("/cart"); //redirect after adding
+            // navigate("/cart"); //redirect after adding
         } catch(error){
-            alert(error.response.data.message);
+            toast.error(error.response.data.message);
         }
     }
-
+    if(loading) return (
+        <div>
+            <Skeleton/>
+            <Skeleton/>
+            <Skeleton/> 
+        </div>
+    );
+    if(error) return <p>{error}</p>;
+    if(foods.length === 0) return <p>No food available.</p>;
     return(
+
         <div>
             <h2>Student Dashboard</h2>
             {/* Search food */}
@@ -116,7 +135,7 @@ function StudentDashboard() {
              <h3>My Orders</h3>
              {orders.map((order)=>(
                 <div key={order._id} style={{ border:"1px solid blue", margin:"10px" }}>
-                    <p>Food: {orders.foodItem?.title}</p>
+                    <p>Food: {order.foodItem?.title}</p>
                     <p>Cook: {order.cook?.name}</p>
                     <p>Quantity: {order.quantity}</p>
                     <p>Status: {order.status}</p>

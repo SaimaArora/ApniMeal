@@ -9,11 +9,15 @@ import CartPage from "./pages/CartPage";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
-
+import { Navigate } from "react-router-dom";
 
 function App() {
   const {user} = useContext(AuthContext);
+  const {loading} = useContext(AuthContext);
 
+  if(loading) {
+    return <p>Loading application...</p>;
+  }
   return (
     <Router>
       <Navbar/>
@@ -28,7 +32,7 @@ function App() {
             {user?.user?.role === "student"?( //login response is user:{ role:"student"}
               <StudentDashboard/>
             ): (
-              <h2>Access Denied</h2>
+              <Navigate to="/"/>
             )}
           </ProtectedRoute>
         }/>
@@ -44,7 +48,7 @@ function App() {
             {user?.user?.role === "cook"?(
               <CookDashboard/>
             ) : (
-              <h2>Access Denied</h2>
+              <Navigate to="/"/>
             )}
           </ProtectedRoute>
         }/>
