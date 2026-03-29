@@ -1,0 +1,166 @@
+/* PAGE */
+.cart-container {
+  display: flex;
+  gap: 30px;
+  padding: 100px 40px;
+  background: #f4f4f4;
+  min-height: 100vh;
+}
+
+/* LEFT SIDE CONTAINER */
+.cart-items {
+  flex: 2;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.05);
+}
+
+/* TITLE */
+.cart-items h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+/* CARD */
+.cart-card {
+  background: #fafafa;
+  padding: 18px 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid #eee;
+  transition: all 0.2s ease;
+}
+
+/* HOVER */
+.cart-card:hover {
+  background: white;
+  transform: translateY(-2px);
+}
+/* LEFT */
+.item-left h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* QUANTITY */
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.qty-controls button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.qty-controls button:hover {
+  background: #ddd;
+}
+
+/* RIGHT */
+.item-right {
+  text-align: right;
+}
+
+.item-right p {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.remove-btn {
+  border: none;
+  background: #fff0f0;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.remove-btn:hover {
+  background: #ffe0e0;
+}
+
+.back-btn {
+  margin-top: 20px;
+  padding: 12px;
+  border: none;
+  background: #111;
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  background: #333;
+}
+
+.cart-summary {
+  flex: 1;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.05);
+}
+/* SUMMARY */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 15px 0;
+}
+
+/* CHECKOUT */
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ffd600;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s ease;
+}
+
+.checkout-btn:hover {
+  background: #f5c400;
+  transform: translateY(-1px);
+}
+
+.checkout-btn:active {
+  transform: scale(0.98);
+}
+
+/* EMPTY */
+.empty-cart {
+  padding: 100px;
+  text-align: center;
+}
+
+.empty-cart button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #ffd600;
+  border: none;
+  cursor: pointer;
+}

@@ -1,24 +1,23 @@
 import {useEffect, useState } from "react";
 import API from "../services/api";
 import {toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "../styles/cart.css";
 
 function CartPage(){
-    const [error, setError] = useState(null);
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [updating, setUpdating] = useState(false);
     const [checkingOut, setCheckingOut] = useState(false);
 
+    const navigate = useNavigate();
     const fetchCart = async ()=>{
         try{
-            setError(null);
             setLoading(true);
             const res = await API.get("/cart");
             setCart(res.data);
         } catch(error) {
-            setError("Failed to load cart");
+            toast.error("Failed to fetch cart");
         } finally {
-            setError(null);
             setLoading(false);
         }
         
@@ -28,10 +27,15 @@ function CartPage(){
     }, []);
 
     const removeItem = async(foodId)=>{
-        await API.delete("/cart", {data:{foodId}});
-        fetchCart();
+        try{
+            await API.delete("/cart", {data:{foodId}});
+            fetchCart();
+        } catch(err){
+            toast.error("Remove failed");
+        }
     };
     const handleCheckout = async()=>{
+        if(!window.confirm("Place order?")) return;
         try{
             setCheckingOut(true);
             await API.post("/cart/checkout");
@@ -45,7 +49,6 @@ function CartPage(){
     };
     const updateQuantity = async(foodId, newQty) =>{
         try{
-            setUpdating(true);
             await API.put("/cart", {
                 foodId,
                 quantity: newQty
@@ -54,8 +57,6 @@ function CartPage(){
         }
         catch(error) {
             toast.error(error.response.data.message || "Failed to update quantity");
-        } finally{
-            setUpdating(false);
         }
     };
     const confirmCheckout = ()=>{
@@ -63,30 +64,63 @@ function CartPage(){
             handleCheckout();
         }
     }
-    if(loading) return <p>Loading cart...</p>
-    if(error) return <p>{error}</p>
-    {cart.items.length===0 &&<p>Your cart is empty</p>}
+    if(loading) return  <p style={{ padding: "100px" }}>Loading cart...</p>;
+    if(!cart || cart.items.length === 0) {
+        return(
+            <div className="empty-cart">
+                <h2>Your cart is empty</h2>
+                <button onClick={()=> navigate("/student-dashboard")}>Browse Food</button>
+            </div>
+        );
+    }
+    const total = cart.items.reduce(
+        (sum, item) => sum+item.food.price * item.quantity,
+        0
+    );
     return(
-        <div>
-            <h2>My Cart</h2>
+        <div className="cart-container">
+            {/* left */}
+            <div className="cart-items">
+                <h2>Your cart</h2>
+                <hr style={{ marginBottom: "20 px", borderColor:"#eee"}}/>
                 {cart.items.map((item)=>(
-                    item.food ? (
-                    <div key={item.food._id}>
-                        <p>{item.food.title}</p>
+                    <div key={item.food._id} className="cart-cart">
                         <div>
-                            <button disabled={updating} onClick={()=> updateQuantity(item.food._id, item.quantity - 1)}>-</button>
-                            <span style={{ margin: "0 10px"}}>{item.quantity}</span>
-                            <button disabled={updating} onClick={()=>updateQuantity(item.food._id, item.quantity+1)}>+</button>
+                            <h3>{item.food.title}</h3>
+                            <div className="qty-controls">
+                                <button onClick={()=> updateQuantity(item.food._id, item.quantity - 1)}>-</button>
+                                <span>{item.quantity}</span>
+                                <button onClick={()=>updateQuantity(item.food._id, item.quantity+1)}>+</button>
+                            </div>
                         </div>
-                        <button disabled={updating} onClick={()=> removeItem(item.food._id)}>Remove</button>
+                        <div className="item-right">
+                            <p>₹{item.food.price * item.quantity}</p>
+                            <button className="remove-btn" onClick={()=> removeItem(item.food._id)}>🗑️</button>
+                        </div>
                     </div>
-                ): null ))}
-            
-            <button disabled={checkingOut} onClick={confirmCheckout}>
-               {checkingOut ? "Processing...":"Checkout"}
-            </button>
+                ))}
+                <button className="back-btn" onClick={()=> navigate("/student-dashboard")}>← Add More Items</button>
+            </div>
+            {/* right */}
+            <div className="cart-summary">
+                <h3>Order Summary</h3>
+                <div className="summary-row">
+                    <span>Items Total</span>
+                    <span>₹{total}</span>
+                </div>
+                <div className="summary-row">
+                    <span>Delivery Fee</span>
+                    <span>₹0</span>
+                </div>
+                <hr/>
+                <div className="summary-total">
+                    <span>Total</span>
+                    <span>₹{total}</span>
+                </div>
+                <button className="checkout-btn" disabled={checkingOut} onClick={handleCheckout}>{checkingOut?"Processing..." : "Place Order"}</button>
+            </div>
         </div>
-    )
+    );
 }
 
 export default CartPage;
