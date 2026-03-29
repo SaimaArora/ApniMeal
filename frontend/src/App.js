@@ -1,15 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 
+// PAGES
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import CookDashboard from "./pages/CookDashboard";
 import CartPage from "./pages/CartPage";
-import Navbar from "./components/Navbar";
+import HomePage from "./pages/HomePage";
+
+// COMPONENTS
+import Navbar from "./components/Navbar"; // Ensure Navbar.js has 'export default Navbar'
 import ProtectedRoute from "./components/ProtectedRoute";
+
+// CONTEXT
 import { AuthContext } from "./context/AuthContext";
-import { Navigate } from "react-router-dom";
 
 function App() {
   const {user} = useContext(AuthContext);
@@ -18,12 +23,14 @@ function App() {
   if(loading) {
     return <p>Loading application...</p>;
   }
+  console.log("Is Navbar a function?", typeof Navbar);
+console.log("Is AuthProvider a function?", typeof AuthProvider);
+console.log("Is HomePage a function?", typeof HomePage);
   return (
     <Router>
-      <Navbar/>
       <Routes>
         
-        <Route path="/" element={<h1>Home Page - We are back!</h1>}/>
+        <Route path="/" element={<HomePage/>}/>
         <Route path="/login" element={<LoginPage />}/>
         <Route path="/register" element={<RegisterPage />}/>
         {/* Student dashboard */}

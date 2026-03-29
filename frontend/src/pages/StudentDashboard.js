@@ -3,6 +3,7 @@ import API from "../services/api";
 import FoodCard from "../components/FoodCard";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Skeleton from "../components/Skeleton";
 
 function StudentDashboard() {
     const [error, setError] = useState(null);
