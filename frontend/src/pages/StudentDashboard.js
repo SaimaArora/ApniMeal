@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import FoodCard from "../components/FoodCard";
+import { useNavigate } from "react-router-dom";
 
 function StudentDashboard() {
     const [foods, setFoods] = useState([]); //store food data
@@ -9,7 +10,7 @@ function StudentDashboard() {
     const activeOrders = orders.filter(
         (o)=>o.status !== "delivered"
     );
-
+    const navigate = useNavigate();
     const fetchOrders = async()=>{
         try{
             const res = await API.get("/orders/my-orders");
@@ -55,6 +56,20 @@ function StudentDashboard() {
             alert(error.response.data.message);
         }
     };
+
+    //add to cart 
+    const handleAddToCart = async(foodId)=>{
+        try{
+            await API.post("/cart", {
+                foodId,
+                quantity: 1
+            });
+            navigate("/cart"); //redirect after adding
+        } catch(error){
+            alert(error.response.data.message);
+        }
+    }
+
     return(
         <div>
             <h2>Student Dashboard</h2>
@@ -62,10 +77,13 @@ function StudentDashboard() {
             <input placeholder="Search food..." value={search} onChange={(e)=> setSearch(e.target.value)}/>
             <button onClick={handleSearch}>Search</button>
              {/*List food  */}
+             <button onClick={()=> navigate("/cart")}>
+                Go to Cart
+             </button>
              <h3>Available Meals</h3>
              <div style={{display:'flex', flexWrap:'wrap'}}>
                 {foods.map((food)=>( //loop and render food cards
-                    <FoodCard key={food._id} food={food} onOrder={handleOrder}/>
+                    <FoodCard key={food._id} food={food} onAddToCart={handleAddToCart}/>
                 ))}
              </div>
                 <hr />

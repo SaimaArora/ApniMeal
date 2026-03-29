@@ -4,7 +4,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const Order = require("../models/Order");
 //get cart
 const getCart = asyncHandler(async(req, res)=>{
-    let cart = await Cart.findOne({student: req.user._id}).populate("itmes.food");
+    let cart = await Cart.findOne({student: req.user._id}).populate("items.food");
     if(!cart) {
         cart = await Cart.create({student: req.user._id, items:[]});
     }
