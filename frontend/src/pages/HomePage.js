@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import API from "../services/api";
+import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate }  from "react-router-dom";
 import "../styles/home.css";
 import logo from "../assets/logo.png";
 
+
 function HomePage() {
+    const {login} = useContext(AuthContext); //intialiaze auth login
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [form, setForm] = useState({
         name:"",
@@ -19,11 +24,18 @@ function HomePage() {
         e.preventDefault();
         try{
             if(isLogin){
-                await API.post("/users/login", form);
+                const res = await API.post("/users/login", form);
+                login(res.data);
                 toast.success("Login successful");
+                if(res.data.user.role === "student") {
+                    navigate("/student-dashboard");
+                } else {
+                    navigate("/cook-dashboard");
+                }
             } else{
                 await API.post("/users/register", form);
                 toast.success("Registered successfully");
+                setIsLogin(true); //switch to login after successful registration
             }
         } catch(error) {
             toast.error(error.response?.data?.message || "Something went wrong");

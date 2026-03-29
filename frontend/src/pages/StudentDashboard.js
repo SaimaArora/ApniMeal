@@ -1,31 +1,22 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import FoodCard from "../components/FoodCard";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Skeleton from "../components/Skeleton";
+import "../styles/dashboard.css"
+import logo from "../assets/logo.png";
 
 function StudentDashboard() {
     const [error, setError] = useState(null);
     const [foods, setFoods] = useState([]); //store food data
     const [search, setSearch] = useState("");
-    const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-    const activeOrders = orders.filter(
-        (o)=>o.status !== "delivered"
-    );
     const navigate = useNavigate();
-    const fetchOrders = async()=>{
-        try{
-            setLoading(true);
-            const res = await API.get("/orders/my-orders");
-            setOrders(res.data.orders);
-        } catch(error) {
-            console.error(error);
-        } finally{
-            setLoading(false);
-        }
-    };
+    const [adding, setAdding] = useState(false);
+    const { logout } = useContext(AuthContext);
     //fetch food
     const fetchFoods = async ()=>{
         try{
@@ -42,44 +33,28 @@ function StudentDashboard() {
 
     useEffect(()=>{
         fetchFoods();
-        fetchOrders();
     }, []); //runs once when component loads
 
-    //search food
-    const handleSearch = async ()=>{
-        try{
-            const res = await API.get(`/foods/search?keyword=${search}`);
-            setFoods(res.data);
-        } catch(error) {
-            console.error(error);
-        }
-    };
-
-    //place order
-    const handleOrder = async(foodId)=>{
-        try{
-            await API.post("/orders", { //connect to backend api post/api/orders
-                foodId,
-                quantity:1
-            });
-            toast.success("Order placed!");
-        } catch(error) {
-            toast.error(error.response.data.message);
-        }
-    };
 
     //add to cart 
     const handleAddToCart = async(foodId)=>{
         try{
+            setAdding(true);
             await API.post("/cart", {
                 foodId,
                 quantity: 1
             });
+            toast.success("Added to cart!");
             // navigate("/cart"); //redirect after adding
         } catch(error){
             toast.error(error.response.data.message);
+        } finally{
+            setAdding(false);
         }
     }
+    const filteredFoods = foods.filter((food)=>
+        food.title.toLowerCase().includes(search.toLowerCase())
+    );
     if(loading) return (
         <div>
             <Skeleton/>
@@ -90,58 +65,32 @@ function StudentDashboard() {
     if(error) return <p>{error}</p>;
     if(foods.length === 0) return <p>No food available.</p>;
     return(
-
-        <div>
-            <h2>Student Dashboard</h2>
-            {/* Search food */}
-            <input placeholder="Search food..." value={search} onChange={(e)=> setSearch(e.target.value)}/>
-            <button onClick={handleSearch}>Search</button>
-             {/*List food  */}
-             <button onClick={()=> navigate("/cart")}>
-                Go to Cart
-             </button>
-             <h3>Available Meals</h3>
-             <div style={{display:'flex', flexWrap:'wrap'}}>
-                {foods.map((food)=>( //loop and render food cards
-                    <FoodCard key={food._id} food={food} onAddToCart={handleAddToCart}/>
-                ))}
-             </div>
-                <hr />
-
-                <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                    <h3>🔔 Active Orders</h3>
-                    <button 
-                        onClick={fetchOrders} 
-                        style={{ padding: "5px 10px", cursor: "pointer", borderRadius: "5px" }}
-                    >
-                        🔄 Check Status
-                    </button>
+        <div className="dashboard-container">
+            <div className="navbar">
+                <img src={logo} alt="ApniMeal Logo" className="logo"/>
+                <input type="text" placeholder="Search dishes like 'rajma', 'dal'..." className="search-bar" value={search} onChange={(e)=> setSearch(e.target.value)}/>
+                <div className="nav-actions">
+                    <button onClick={()=> navigate("/cart")}>🛒</button>
+                    <button onClick={logout}>Logout</button>
                 </div>
-                {activeOrders.length === 0 ? <p>No current orders.</p> : activeOrders.map((order) => (
-                    <div key={order._id} style={{ border: "2px solid green", margin: "10px", padding: "10px", borderRadius: "5px" }}>
-                        <p><strong>Food: {order.foodItem?.title}</strong></p>
-                        <p>Cook: {order.cook?.name}</p>
-                        <p>Status: <b style={{ color: "orange" }}>{order.status}</b></p>
+            </div>
+            {/* food list */}
+            <div className="food-list">
+                {filteredFoods.map((food)=>(
+                    <div key={food._id} className="food-card">
+                        <div className={`veg-indicator ${
+                            food.isVeg ? "veg" : "non-veg"
+                        }`} />
+                        <div className="card-right">
+                            <p className="price">₹{food.price}</p>
+                            <button className="cart-btn" disabled={adding} onClick={()=> handleAddToCart(food._id)}>🛒</button>
+                        </div>
+                        <h3>{food.title}</h3>
+                        <p className="desc">{food.description}</p>
+                        <p className="cook">Cook: {food.cook?.name}</p>
                     </div>
                 ))}
-
-                {/* --- ORDER HISTORY (Delivered) --- */}
-                <h3>📜 Order History</h3>
-                {orders.filter(o => o.status === "delivered").map((order) => (
-                    <div key={order._id} style={{ border: "1px solid gray", margin: "10px", padding: "10px", opacity: 0.7 }}>
-                        <p>Food: {order.foodItem?.title}</p>
-                        <p>Status: {order.status}</p>
-                    </div>
-                ))}
-             <h3>My Orders</h3>
-             {orders.map((order)=>(
-                <div key={order._id} style={{ border:"1px solid blue", margin:"10px" }}>
-                    <p>Food: {order.foodItem?.title}</p>
-                    <p>Cook: {order.cook?.name}</p>
-                    <p>Quantity: {order.quantity}</p>
-                    <p>Status: {order.status}</p>
-                </div>
-             ))}
+            </div>
         </div>
     );
 }

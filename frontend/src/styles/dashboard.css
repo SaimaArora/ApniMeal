@@ -1,0 +1,132 @@
+/* PAGE BACKGROUND */
+.dashboard-container {
+  background: #f4f4f4;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  background: white;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 10;
+}
+
+/* LOGO */
+.logo {
+  height: 40px;
+}
+
+/* SEARCH BAR */
+.search-bar {
+  width: 40%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+  background: #fafafa;
+}
+
+/* NAV ACTIONS */
+.nav-actions button {
+  margin-left: 10px;
+  padding: 10px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #ffd600;
+  font-weight: 600;
+}
+
+/* FOOD LIST */
+.food-list {
+  padding: 100px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* FOOD CARD */
+.food-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease;
+}
+
+.food-card:hover {
+  transform: translateY(-3px);
+}
+
+/* VEG INDICATOR */
+.veg-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.veg {
+  background: green;
+}
+
+.nonveg {
+  background: red;
+}
+
+/* RIGHT SIDE */
+.card-right {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  text-align: right;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.cart-btn {
+  margin-top: 8px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #ffd600;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.cart-btn:hover {
+  background: #f5c400;
+}
+
+/* TEXT */
+.food-card h3 {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.desc {
+  color: #555;
+  margin: 8px 0;
+}
+
+.cook {
+  font-size: 13px;
+  color: #888;
+}
