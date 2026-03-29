@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import CookDashboard from "./pages/CookDashboard";
 import CartPage from "./pages/CartPage";
-
+import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthContext } from "./context/AuthContext";
 
@@ -16,7 +16,9 @@ function App() {
 
   return (
     <Router>
+      <Navbar/>
       <Routes>
+        
         <Route path="/" element={<h1>Home Page - We are back!</h1>}/>
         <Route path="/login" element={<LoginPage />}/>
         <Route path="/register" element={<RegisterPage />}/>
@@ -33,7 +35,7 @@ function App() {
         {/* Add to cart */}
         <Route path="/cart" element={
           <ProtectedRoute>
-            {user?.user?.role==="student" ? <CartPage/>: <h2>Access Denied</h2>}
+            <CartPage/>
           </ProtectedRoute>
         }/>
         {/* Cook dashboard */}

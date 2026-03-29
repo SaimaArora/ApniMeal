@@ -68,9 +68,38 @@ const checkout = asyncHandler(async(req, res)=>{
     });
 });
 
+//update cart item quantity 
+const updateCartItem = asyncHandler(async(req, res)=>{
+    const { foodId, quantity } = req.body;
+    const cart = await Cart.findOne({ student: req.user._id });
+    if(!cart) {
+        res.status(404);
+        throw new Error("Cart not found");
+    }
+    const item = cart.items.find((item)=> item.food.toString() === foodId);
+    if(!item) {
+        res.status(404);
+        throw new Error("Item not found in cart");
+    }
+    if(quantity <= 0) {
+        cart.items = cart.items.filter(
+            (i)=> i.food.toString() !== foodId
+        );
+    } else {
+        item.quantity = quantity;
+    }
+
+    await cart.save();
+    res.json({
+        success: true,
+        cart
+    });
+});
+
 module.exports={
     getCart,
     addToCart,
     removeFromCart,
-    checkout
+    checkout,
+    updateCartItem
 };

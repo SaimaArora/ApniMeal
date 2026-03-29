@@ -31,7 +31,7 @@ function CartPage(){
         catch(error) {
             alert(error.response.data.message);
         }
-    })
+    };
     if(!cart) return <p>Loading...</p>
     return(
         <div>
@@ -44,6 +44,7 @@ function CartPage(){
                             <button onClick={()=> updateQuantity(item.food._id, item.quantity - 1)}>-</button>
                             <span style={{ margin: "0 10px"}}>{item.quantity}</span>
                             <button onClick={()=>updateQuantity(item.food._id, item.quantity+1)}>+</button>
+                        </div>
                         <button onClick={()=> removeItem(item.food._id)}>Remove</button>
                     </div>
                 ): null ))}
