@@ -1,0 +1,218 @@
+/* PAGE */
+.cook-container {
+  background: #f4f4f4;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  width: 100%;
+  height: 70px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  border-bottom: 1px solid #eee;
+}
+
+/* SEARCH */
+.search-bar {
+  width: 40%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* STATS */
+.stats {
+  margin-top: 90px;
+  display: flex;
+  gap: 20px;
+  padding: 0 30px;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+}
+
+.stat-card h2 {
+  font-size: 28px;
+  margin-top: 10px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 10px;
+  padding: 20px 30px;
+}
+
+.tabs button {
+  padding: 10px 15px;
+  border: none;
+  background: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tabs .active {
+  background: #ffd600;
+}
+
+/* CONTENT */
+.content {
+  padding: 0 30px 30px;
+}
+
+/* ORDER CARD */
+.order-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
+}
+
+.order-card h3 {
+  margin-bottom: 10px;
+}
+
+.order-card button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #ffd600;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.greeting {
+  margin-top: 90px;
+  padding: 0 30px;
+  font-size: 22px;
+}
+.food-form-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.05);
+}
+
+.editing-text {
+  color: #666;
+  margin-bottom: 10px;
+}
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.food-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+}
+
+.food-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.available {
+  color: green;
+}
+
+.not-available {
+  color: red;
+}
+/* Update existing primary-btn or add it */
+.primary-btn {
+  background: #ffd600;
+  color: black;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  background: #e6c100;
+}
+
+.secondary-btn {
+  background: #eee;
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Navbar Buttons */
+.logout-btn {
+  margin-left: 10px;
+  padding: 10px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #ffd600;
+  font-weight: 600;
+}
+
+/* Status Tags */
+.status-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.pending { background: #fff3cd; color: #856404; }
+.accepted { background: #d1ecf1; color: #0c5460; }
+.preparing { background: #cce5ff; color: #004085; }
+.delivering { background: #e2e3e5; color: #383d41; }
+.delivered { background: #d4edda; color: #155724; }
+
+/* Food Action Buttons inside Grid */
+.food-actions button {
+  flex: 1;
+  font-size: 12px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background: white;
+}
+
+.food-actions .edit-btn:hover { background: #d1ecf1; }
+.food-actions .delete-btn:hover { background: #f8d7da; color: #721c24; }
+.food-actions .toggle-btn:hover { background: #eee; }
+
+/* General Layout Fixes */
+.navbar .logo {
+  height: 40px;
+}
+
+.greeting {
+  padding-top: 100px; /* Offset for fixed navbar */
+  margin-top: 0;
+}
+
+.stats {
+  margin-top: 20px;
+}
