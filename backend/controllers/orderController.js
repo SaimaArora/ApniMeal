@@ -73,8 +73,8 @@ const updateOrderStatus = asyncHandler(async(req, res)=> {
         const validTransitions = { //allowed flow
             pending:["accepted"], 
             accepted:["preparing"],
-            preparing: ["delivered"],
-            delivered:[]
+            preparing: ["completed"],
+            completed:[]
         };
         const currentStatus = order.status;
         if(!validTransitions[currentStatus].includes(status)) {

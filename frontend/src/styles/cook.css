@@ -18,6 +18,10 @@
   border-bottom: 1px solid #eee;
 }
 
+.navbar .logo {
+  height: 40px;
+}
+
 /* SEARCH */
 .search-bar {
   width: 40%;
@@ -26,12 +30,19 @@
   border: 1px solid #ddd;
 }
 
+/* GREETING */
+.greeting {
+  padding-top: 100px;
+  margin: 0;
+  padding-left: 30px;
+  font-size: 22px;
+}
+
 /* STATS */
 .stats {
-  margin-top: 90px;
   display: flex;
   gap: 20px;
-  padding: 0 30px;
+  padding: 20px 30px;
 }
 
 .stat-card {
@@ -52,7 +63,7 @@
 .tabs {
   display: flex;
   gap: 10px;
-  padding: 20px 30px;
+  padding: 10px 30px 20px;
 }
 
 .tabs button {
@@ -70,6 +81,8 @@
 /* CONTENT */
 .content {
   padding: 0 30px 30px;
+  max-width: 1200px;   /* 🔥 important */
+  margin: 0 auto;      /* 🔥 centers everything */
 }
 
 /* ORDER CARD */
@@ -81,10 +94,6 @@
   box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
 }
 
-.order-card h3 {
-  margin-bottom: 10px;
-}
-
 .order-card button {
   margin-top: 10px;
   padding: 8px 12px;
@@ -94,40 +103,181 @@
   border-radius: 6px;
 }
 
-.greeting {
-  margin-top: 90px;
-  padding: 0 30px;
-  font-size: 22px;
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  justify-content: center; /* 🔥 */
 }
+/* BUTTONS */
+.primary-btn {
+  background: #ffd600;
+  color: black;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #e6c100;
+}
+
+.secondary-btn {
+  background: #eee;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  padding: 10px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #ffd600;
+  font-weight: 600;
+}
+
+/* FOOD FORM */
 .food-form-card {
+  width: 100%;
   background: white;
   padding: 25px;
   border-radius: 12px;
-  margin-bottom: 25px;
   box-shadow: 0px 6px 20px rgba(0,0,0,0.05);
 }
 
-.editing-text {
-  color: #666;
-  margin-bottom: 10px;
+.food-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #ffd600;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 214, 0, 0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; /* 🔥 prevents overflow */
+}
+
+.form-group {
+  flex: 1;
+  min-width: 220px; /* 🔥 prevents shrinking too much */
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+/* FOOD GRID */
 .food-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* slightly bigger */
+  gap: 24px; /* 🔥 increase spacing */
+  margin-top: 10px;
 }
 
+/* FOOD CARD */
 .food-card {
   background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+  padding: 20px; /* 🔥 more breathing room */
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* 🔥 better internal spacing */
+  transition: 0.2s;
 }
 
-.food-actions {
+.food-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.1);
+}
+
+/* HEADER */
+.food-header {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.food-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* TAGS */
+.veg-tag {
+  background: #e8f5e9;
+  color: green;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.nonveg-tag {
+  background: #fdecea;
+  color: red;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* DESCRIPTION */
+.food-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4; /* 🔥 improves readability */
+}
+
+/* META */
+.food-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price-tag {
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .available {
@@ -137,82 +287,196 @@
 .not-available {
   color: red;
 }
-/* Update existing primary-btn or add it */
-.primary-btn {
-  background: #ffd600;
-  color: black;
-  font-weight: 600;
-  padding: 10px 20px;
+
+/* ACTION BUTTONS */
+.food-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.food-actions button {
+  flex: 1;
+  font-size: 13px;
+  padding: 8px;
+  border-radius: 6px;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.primary-btn:hover {
+/* BUTTON COLORS */
+.edit-btn {
+  background: #ffd600;
+  font-weight: 600;
+}
+
+.edit-btn:hover {
   background: #e6c100;
 }
 
-.secondary-btn {
-  background: #eee;
-  margin-left: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.delete-btn {
+  background: #ffe5e5;
+  color: #c62828;
 }
 
-/* Navbar Buttons */
-.logout-btn {
-  margin-left: 10px;
-  padding: 10px 14px;
-  border: none;
-  cursor: pointer;
-  border-radius: 6px;
-  background: #ffd600;
+.delete-btn:hover {
+  background: #f8d7da;
+}
+
+.toggle-btn {
+  background: #f1f1f1;
+}
+
+.toggle-btn:hover {
+  background: #ddd;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* FOOD SECTION LAYOUT */
+.foods-section {
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* 🔥 more separation */
+}
+
+/* EXTRA SPACE BELOW GRID */
+.food-grid {
+  margin-bottom: 10px;
+}
+
+/* FORM SEPARATION */
+.food-form-card {
+  margin-top: 10px;
+}
+
+/* OPTIONAL: subtle divider effect */
+.food-form-card {
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+  width:100%;
+}
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+}
+
+.empty-state h3 {
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: #666;
+}
+/* ORDER CARD UPGRADE */
+.order-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* TOP SECTION */
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-top h3 {
+  font-size: 16px;
   font-weight: 600;
 }
 
-/* Status Tags */
-.status-tag {
+/* DETAILS */
+.order-details {
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ACTION BUTTON */
+.order-action-btn {
+  margin-top: 5px;
+}
+
+/* STATUS BADGE */
+.status-badge {
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 12px;
-  text-transform: uppercase;
-  font-weight: bold;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
-.pending { background: #fff3cd; color: #856404; }
-.accepted { background: #d1ecf1; color: #0c5460; }
-.preparing { background: #cce5ff; color: #004085; }
-.delivering { background: #e2e3e5; color: #383d41; }
-.delivered { background: #d4edda; color: #155724; }
-
-/* Food Action Buttons inside Grid */
-.food-actions button {
-  flex: 1;
-  font-size: 12px;
-  padding: 6px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  cursor: pointer;
-  background: white;
+/* COLORS */
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
 }
 
-.food-actions .edit-btn:hover { background: #d1ecf1; }
-.food-actions .delete-btn:hover { background: #f8d7da; color: #721c24; }
-.food-actions .toggle-btn:hover { background: #eee; }
-
-/* General Layout Fixes */
-.navbar .logo {
-  height: 40px;
+.status-badge.accepted {
+  background: #d1ecf1;
+  color: #0c5460;
 }
 
-.greeting {
-  padding-top: 100px; /* Offset for fixed navbar */
-  margin-top: 0;
+.status-badge.preparing {
+  background: #cce5ff;
+  color: #004085;
 }
 
-.stats {
-  margin-top: 20px;
+.status-badge.delivering {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.status-badge.delivered {
+  background: #d4edda;
+  color: #155724;
 }

@@ -6,6 +6,7 @@ import logo from "../assets/logo.png";
 import "../styles/cook.css";
 
 function CookDashboard(){
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const {user} = useContext(AuthContext);
     const {logout} = useContext(AuthContext);
     const [myFoods, setMyFoods] = useState([]);
@@ -34,22 +35,20 @@ function CookDashboard(){
     //submit food
     const handleSubmit = async (e)=>{
         e.preventDefault();
+        if(Number(form.price) <= 0) {
+            toast.error("Price must be greater than zero");
+            return;
+        }
         try{
             if(editingFood){
                 await API.put(`/foods/${editingFood._id}`, form);
                 toast.success("Food updated!");
+                setIsModalOpen(false);
             } else{
                 await API.post("/foods", form);
                 toast.success("Food added!");
             }
-            setEditingFood(null);
-            //reset form
-            setForm({
-                title:"",
-                description:"",
-                price:"",
-                isVeg:true
-            });
+            resetForm();
             fetchMyFoods();
         } catch(error){
             toast.error("Action Failed");
@@ -80,9 +79,12 @@ function CookDashboard(){
         fetchMyFoods();
     },[]);
 
-    const updateStatus = async(orderId, status) =>{
+    const updateStatus = async(order, status) =>{
+        
+            console.log("CURRENT:", order.status);
+console.log("REQUESTED:", status);
         try{
-            await API.put(`/orders/${orderId}/status`, {status});
+            await API.put(`/orders/${order._id}/status`, {status});
             fetchOrders(); //refresh
         } catch(error){
             toast.error(error.response?.data?.message);
@@ -94,11 +96,12 @@ function CookDashboard(){
             case "incoming":
                 return filteredOrders.filter(o=> o.status === "pending");
             case "active":
-                return filteredOrders.filter(o=>
-                    ["accepted", "preparing", "delivering"].includes(o.status)
+                return filteredOrders.filter(o =>
+                    ["accepted", "preparing"].includes(o.status)
                 );
+
             case "completed":
-                return filteredOrders.filter(o=> o.status === "delivered");
+                return filteredOrders.filter(o => o.status === "completed");
             case "cancelled":
                 return filteredOrders.filter(o=> o.status === "cancelled");
             default:
@@ -140,33 +143,44 @@ function CookDashboard(){
             toast.error("Failed to update availability");
         }
     };
-
-    const startEdit = (food) =>{
+    const startEdit = (food) => {
         setEditingFood(food);
         setForm({
             title: food.title,
-            description:food.description,
-            price:food.price,
-            isVeg:food.isVeg
+            description: food.description,
+            price: food.price,
+            isVeg: food.isVeg
         });
+
+        setIsModalOpen(true); // 🔥 open modal
     };
     const getNextStatus = (currentStatus) => {
         switch(currentStatus) {
             case "pending":
-                return { label: "Accept", next: "accepted"};
-            case "accepted" :
-                return {label: "Preparing", next:"preparing"};
+                return { label: "Accept", next: "accepted" };
+
+            case "accepted":
+                return { label: "Start Preparing", next: "preparing" };
+
             case "preparing":
-                return {label:"Out for Delivery", next: "delivering"};
-            case "delivering":
-                return {label: "Mark Delivered", next: "delivered"};
+                return { label: "Mark Completed", next: "completed" };
+
             default:
                 return null;
         }
     };
 
+    const resetForm = ()=>{
+        setEditingFood(null);
+        setForm({
+            title: "",
+            description:"",
+            price:"",
+            isVeg:true
+        });
+    };
 
- return (
+    return (
         <div className="cook-container">
             <div className="navbar">
                 <img src={logo} alt="Logo" className="logo" />
@@ -214,87 +228,232 @@ function CookDashboard(){
 
             {/* content */}
             <div className="content">
+                
                 {activeTab !== "foods" ? (
-                    getTabOrders().map(order => {
+                    <div className="orders-grid">
+                    {getTabOrders().map(order => {
                         const action = getNextStatus(order.status);
                         return (
                             <div className="order-card" key={order._id}>
-                                <div className="order-info">
+                                <div className="order-top">
                                     <h3>{order.foodItem?.title}</h3>
-                                    <p>Student: {order.student?.name}</p>
-                                    <p>Qty: {order.quantity}</p>
+                                    <span className={`status-badge ${order.status}`}>
+                                        {order.status}
+                                    </span>
                                 </div>
+
+                                <div className="order-details">
+                                    <p><strong>Student:</strong> {order.student?.name}</p>
+                                    <p><strong>Quantity:</strong> {order.quantity}</p>
+                                    <p><strong>Total:</strong> ₹{order.totalPrice}</p>
+                                </div>
+
                                 {action && (
-                                    <button className="primary-btn" onClick={() => updateStatus(order._id, action.next)}>
+                                    <button 
+                                        className="primary-btn order-action-btn"
+                                        onClick={() => updateStatus(order, action.next)}
+                                    >
                                         {action.label}
                                     </button>
                                 )}
                             </div>
                         );
-                    })
-                ) : (
-                    <div className="foods-section">
-                        <div className="food-form-card">
-                            <h3>{editingFood ? "Edit Food" : "Add New Dish"}</h3>
-                            {editingFood && (
-                                <p className="editing-text">
-                                    Editing: <strong>{editingFood.title}</strong>
-                                </p>
-                            )}
-                            <form onSubmit={handleSubmit}>
-                                <input
-                                    name="title"
-                                    value={form.title}
-                                    onChange={handleChange}
-                                    placeholder="Dish name" required
-                                />
-                                <input
-                                    name="description"
-                                    value={form.description}
-                                    onChange={handleChange}
-                                    placeholder="Short description" required
-                                />
-                                <input
-                                    name="price"
-                                    value={form.price}
-                                    onChange={handleChange}
-                                    placeholder="Price" required
-                                />
-                                <select name="isVeg" value={form.isVeg} onChange={handleChange}>
-                                    <option value="true">Veg</option>
-                                    <option value="false">Non-Veg</option>
-                                </select>
-
-                                <button className="primary-btn" type="submit">
-                                    {editingFood ? "Update Food" : "Add Food"}
-                                </button>
-                                {editingFood && (
-                                    <button type="button" className="secondary-btn" onClick={() => setEditingFood(null)}>
-                                        Cancel
-                                    </button>
-                                )}
-                            </form>
-                        </div>
-
-                        <div className="food-grid">
-                            {myFoods.map(food => (
-                                <div className="food-card" key={food._id}>
-                                    <h4>{food.title}</h4>
-                                    <p className="price-tag">₹{food.price}</p>
-                                    <p className={food.available ? "available" : "not-available"}>
-                                        {food.available ? "● Available" : "● Unavailable"}
-                                    </p>
-                                    <div className="food-actions">
-                                        <button className="edit-btn" onClick={() => startEdit(food)}>Edit</button>
-                                        <button className="delete-btn" onClick={() => handleDelete(food._id)}>Delete</button>
-                                        <button className="toggle-btn" onClick={() => toggleAvailability(food)}>Toggle</button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                    })}
                     </div>
+                ) : (
+                    <>
+                        <div className="foods-section">
+                            {/* FOOD CARDS */}
+                            <h3 className="section-title">Your Dishes</h3>
+                            <div className="food-grid">
+                                {myFoods.length === 0 ? (
+                                    <div className="empty-state">
+                                        <h3>No dishes added yet 🍽️</h3>
+                                        <p>Start by adding your first dish below</p>
+                                    </div>
+                                ) : (
+                                    myFoods.map(food => (
+                                        <div className="food-card" key={food._id}>
+                                        <div className="food-header">
+                                            <h4>{food.title}</h4>
+                                            <span className={food.isVeg ? "veg-tag" : "nonveg-tag"}>
+                                                {food.isVeg ? "Veg" : "Non-Veg"}
+                                            </span>
+                                        </div>
+
+                                        <p className="food-desc">{food.description}</p>
+
+                                        <div className="food-meta">
+                                            <span className="price-tag">₹{food.price}</span>
+                                            <span className={food.available ? "available" : "not-available"}>
+                                                {food.available ? "● Available" : "● Unavailable"}
+                                            </span>
+                                        </div>
+
+                                        <div className="food-actions">
+                                            <button 
+                                                className="edit-btn" 
+                                                onClick={() => startEdit(food)}
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <button 
+                                                className="delete-btn" 
+                                                onClick={() => handleDelete(food._id)}
+                                            >
+                                                Delete
+                                            </button>
+
+                                            <button 
+                                                className="toggle-btn" 
+                                                onClick={() => toggleAvailability(food)}
+                                            >
+                                                {food.available ? "Disable" : "Enable"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )))}
+                            </div>
+
+                            {/* ADD FOOD FORM */}
+                            <div className="food-form-card">
+                                <h3>Add New Dish</h3>
+
+                                <form className="food-form" onSubmit={handleSubmit}>
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Dish Name</label>
+                                            <input
+                                                name="title"
+                                                value={form.title}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label>Description</label>
+                                            <input
+                                                name="description"
+                                                value={form.description}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Price</label>
+                                            <input
+                                                name="price"
+                                                type="number"
+                                                value={form.price}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label>Category</label>
+                                            <select
+                                                name="isVeg"
+                                                value={form.isVeg}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="true">Veg</option>
+                                                <option value="false">Non-Veg</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-actions">
+                                        <button className="primary-btn" type="submit">
+                                            Add Food
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        {/* ✅ MODAL OUTSIDE */}
+                        {isModalOpen && (
+                            <div className="modal-overlay">
+                                <div className="modal">
+                                    <h3>Edit Dish</h3>
+
+                                    <form onSubmit={handleSubmit} className="food-form">
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label>Dish Name</label>
+                                                <input
+                                                    name="title"
+                                                    value={form.title}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Description</label>
+                                                <input
+                                                    name="description"
+                                                    value={form.description}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label>Price</label>
+                                                <input
+                                                    name="price"
+                                                    type="number"
+                                                    value={form.price}
+                                                    onChange={handleChange}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Category</label>
+                                                <select
+                                                    name="isVeg"
+                                                    value={form.isVeg}
+                                                    onChange={handleChange}
+                                                >
+                                                    <option value="true">Veg</option>
+                                                    <option value="false">Non-Veg</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-actions">
+                                            <button className="primary-btn" type="submit">
+                                                Update Food
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className="secondary-btn"
+                                                onClick={() => {
+                                                    setIsModalOpen(false);
+                                                    resetForm();
+                                                }}
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+                    </>
                 )}
-            </div>
+                </div>
         </div>
     );
 }

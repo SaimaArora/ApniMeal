@@ -32,7 +32,7 @@ router.put("/:id/cancel", protect, authorizeRoles("student"), cancelOrder);
 //update status validation
 //cook updates status
 router.put("/:id/status", protect, authorizeRoles("cook"),[
-    body("status").isIn(["pending", "accepted", "preparing", "delivered"]).withMessage("Invalid status")
+    body("status").isIn(["pending", "accepted", "preparing", "completed"]).withMessage("Invalid status")
 ], validate, updateOrderStatus);
 
 
