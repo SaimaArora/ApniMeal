@@ -8,6 +8,7 @@ function CartPage(){
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
     const [checkingOut, setCheckingOut] = useState(false);
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
     const navigate = useNavigate();
     const fetchCart = async ()=>{
@@ -35,11 +36,11 @@ function CartPage(){
         }
     };
     const handleCheckout = async()=>{
-        if(!window.confirm("Place order?")) return;
         try{
             setCheckingOut(true);
             await API.post("/cart/checkout");
             toast.success("Order placed successfully!")
+            setShowCheckoutModal(false);
             fetchCart();
         } catch(error) {
             toast.error(error.response.data.message || "Checkout failed");  
@@ -48,6 +49,7 @@ function CartPage(){
         }
     };
     const updateQuantity = async(foodId, newQty) =>{
+        if(newQty < 1) return removeItem(foodId);
         try{
             await API.put("/cart", {
                 foodId,
@@ -84,7 +86,7 @@ function CartPage(){
                 <h2>Your cart</h2>
                 <hr style={{ marginBottom: "20 px", borderColor:"#eee"}}/>
                 {cart.items.map((item)=>(
-                    <div key={item.food._id} className="cart-cart">
+                    <div key={item.food._id} className="cart-card">
                         <div>
                             <h3>{item.food.title}</h3>
                             <div className="qty-controls">
@@ -117,8 +119,24 @@ function CartPage(){
                     <span>Total</span>
                     <span>₹{total}</span>
                 </div>
-                <button className="checkout-btn" disabled={checkingOut} onClick={handleCheckout}>{checkingOut?"Processing..." : "Place Order"}</button>
+                <button className="checkout-btn" disabled={checkingOut} onClick={()=> setShowCheckoutModal(true)}>
+                    {checkingOut ? "Processing..." : "Place Order"}
+                </button>
             </div>
+            {showCheckoutModal && (
+                <div className="modal-overlay">
+                    <div className="modal">
+                        <h3>Confirm Your Order</h3>
+                        <p>Total Amount: <strong>₹{total}</strong></p>
+                        <div className="modal-buttons">
+                            <button onClick={() => setShowCheckoutModal(false)} disabled={checkingOut}>Cancel</button>
+                            <button className="confirm-btn" onClick={handleCheckout} disabled={checkingOut}>
+                                {checkingOut ? "Confirming..." : "Confirm & Pay"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

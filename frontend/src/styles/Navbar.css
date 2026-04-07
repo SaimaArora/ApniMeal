@@ -1,0 +1,61 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #2e7d32;
+  color: white;
+}
+
+/* LOGO */
+.logo-img {
+  height: 45px;
+  cursor: pointer;
+}
+
+/* NAV LINKS */
+.nav-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+/* ACTIVE TAB */
+.nav-links a.active {
+  border-bottom: 2px solid yellow;
+}
+
+/* SEARCH */
+.search-form input {
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  width: 250px;
+}
+
+/* RIGHT SIDE */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-actions a {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-actions a.active {
+  border-bottom: 2px solid yellow;
+}
+
+.nav-actions button {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  color: #2e7d32;
+  border-radius: 5px;
+}

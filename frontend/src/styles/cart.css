@@ -7,7 +7,7 @@
   min-height: 100vh;
 }
 
-/* LEFT SIDE CONTAINER */
+/* LEFT SIDE */
 .cart-items {
   flex: 2;
   background: white;
@@ -22,7 +22,7 @@
   font-size: 22px;
 }
 
-/* CARD */
+/* CART ITEM CARD */
 .cart-card {
   background: #fafafa;
   padding: 18px 20px;
@@ -33,15 +33,15 @@
   align-items: center;
 
   border: 1px solid #eee;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
-/* HOVER */
 .cart-card:hover {
   background: white;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
-/* LEFT */
+
+/* LEFT CONTENT */
 .item-left h3 {
   font-size: 16px;
   margin-bottom: 8px;
@@ -53,6 +53,7 @@
   align-items: center;
   gap: 10px;
 }
+
 .qty-controls button {
   width: 32px;
   height: 32px;
@@ -60,14 +61,18 @@
   background: #eee;
   cursor: pointer;
   border-radius: 6px;
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
 .qty-controls button:hover {
   background: #ddd;
 }
 
-/* RIGHT */
+.qty-controls button:active {
+  transform: scale(0.85);
+}
+
+/* RIGHT SIDE */
 .item-right {
   text-align: right;
 }
@@ -77,6 +82,7 @@
   font-size: 16px;
 }
 
+/* REMOVE BUTTON */
 .remove-btn {
   border: none;
   background: #fff0f0;
@@ -90,6 +96,7 @@
   background: #ffe0e0;
 }
 
+/* BACK BUTTON */
 .back-btn {
   margin-top: 20px;
   padding: 12px;
@@ -105,6 +112,7 @@
   background: #333;
 }
 
+/* RIGHT SIDE SUMMARY */
 .cart-summary {
   flex: 1;
   background: white;
@@ -115,6 +123,7 @@
   top: 100px;
   box-shadow: 0px 6px 20px rgba(0,0,0,0.05);
 }
+
 /* SUMMARY */
 .summary-row {
   display: flex;
@@ -130,7 +139,7 @@
   margin: 15px 0;
 }
 
-/* CHECKOUT */
+/* CHECKOUT BUTTON */
 .checkout-btn {
   width: 100%;
   padding: 14px;
@@ -139,19 +148,19 @@
   font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
-  transition: 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .checkout-btn:hover {
   background: #f5c400;
-  transform: translateY(-1px);
+  transform: scale(1.03);
 }
 
 .checkout-btn:active {
   transform: scale(0.98);
 }
 
-/* EMPTY */
+/* EMPTY CART */
 .empty-cart {
   padding: 100px;
   text-align: center;
@@ -163,4 +172,111 @@
   background: #ffd600;
   border: none;
   cursor: pointer;
+  border-radius: 6px;
+}
+
+/* ========================= */
+/* 🔥 MODAL (UPGRADED) */
+/* ========================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  animation: fadeIn 0.3s ease;
+}
+
+.modal {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
+
+  animation: scaleIn 0.25s ease;
+}
+
+.modal h3 {
+  margin-bottom: 10px;
+}
+
+.modal p {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* MODAL BUTTONS */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* CONFIRM BUTTON */
+.modal-buttons button:first-child {
+  background: #ffd600;
+}
+
+.modal-buttons button:first-child:hover {
+  background: #f5c400;
+}
+
+/* CANCEL BUTTON */
+.modal-buttons button:last-child {
+  background: #eee;
+}
+
+.modal-buttons button:last-child:hover {
+  background: #ddd;
+}
+
+/* ========================= */
+/* ✨ ANIMATIONS */
+/* ========================= */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.modal h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #555;
+}
+
+.modal strong {
+  color: #111;
 }

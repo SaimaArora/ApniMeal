@@ -3,7 +3,7 @@ import API from "../services/api";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import FoodCard from "../components/FoodCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Skeleton from "../components/Skeleton";
 import "../styles/dashboard.css"
@@ -17,12 +17,16 @@ function StudentDashboard() {
     const navigate = useNavigate();
     const [adding, setAdding] = useState(false);
     const { logout } = useContext(AuthContext);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get("q") || "";
     //fetch food
-    const fetchFoods = async ()=>{
+    console.log("Search Query:", searchQuery);
+    const fetchFoods = async (query="")=>{
         try{
             setLoading(true);
             setError(null);
-            const res = await API.get("/foods");
+            const res = query ? await API.get(`/foods/search?keyword=${query}`) : await API.get("/foods");
             setFoods(res.data.foods);
         } catch(error) {
             setError("Failed to fetch foods.");
@@ -32,8 +36,13 @@ function StudentDashboard() {
     };
 
     useEffect(()=>{
-        fetchFoods();
-    }, []); //runs once when component loads
+        if(searchQuery){
+            fetchFoods(searchQuery);
+        }
+        else {
+            fetchFoods();
+        }
+    }, [searchQuery]); //runs once when component loads
 
 
     //add to cart 
@@ -66,14 +75,16 @@ function StudentDashboard() {
     if(foods.length === 0) return <p>No food available.</p>;
     return(
         <div className="dashboard-container">
-            <div className="navbar">
+
+            {/* <div className="navbar">
                 <img src={logo} alt="ApniMeal Logo" className="logo"/>
                 <input type="text" placeholder="Search dishes like 'rajma', 'dal'..." className="search-bar" value={search} onChange={(e)=> setSearch(e.target.value)}/>
                 <div className="nav-actions">
                     <button onClick={()=> navigate("/cart")}>🛒</button>
+                    <button onClick={()=> navigate("/student-dashboard/orders")}>Orders</button>
                     <button onClick={logout}>Logout</button>
                 </div>
-            </div>
+            </div> */}
             {/* food list */}
             <div className="food-list">
                 {filteredFoods.map((food)=>(

@@ -8,6 +8,8 @@ import StudentDashboard from "./pages/StudentDashboard";
 import CookDashboard from "./pages/CookDashboard";
 import CartPage from "./pages/CartPage";
 import HomePage from "./pages/HomePage";
+import OrderHistory from "./pages/OrderHistory";
+import StudentHomePage from "./pages/StudentHomePage";
 
 // COMPONENTS
 import Navbar from "./components/Navbar"; // Ensure Navbar.js has 'export default Navbar'
@@ -23,11 +25,9 @@ function App() {
   if(loading) {
     return <p>Loading application...</p>;
   }
-  console.log("Is Navbar a function?", typeof Navbar);
-console.log("Is AuthProvider a function?", typeof AuthProvider);
-console.log("Is HomePage a function?", typeof HomePage);
   return (
     <Router>
+      {user && <Navbar/>}
       <Routes>
         
         <Route path="/" element={<HomePage/>}/>
@@ -49,12 +49,32 @@ console.log("Is HomePage a function?", typeof HomePage);
             <CartPage/>
           </ProtectedRoute>
         }/>
+        {/* Student orders */}
+        <Route path="/student-dashboard/orders" element={
+          <ProtectedRoute>
+            {user?.user?.role === "student" ? (
+              <OrderHistory/>
+            ):(
+              <Navigate to="/"/>
+            )}
+          </ProtectedRoute>
+        }/>
         {/* Cook dashboard */}
         <Route path="/cook-dashboard" element={
           <ProtectedRoute>
             {user?.user?.role === "cook"?(
               <CookDashboard/>
             ) : (
+              <Navigate to="/"/>
+            )}
+          </ProtectedRoute>
+        }/>
+        {/* Student home page */}
+        <Route path="/student-home" element={
+          <ProtectedRoute>
+            {user?.user?.role === "student"?(
+              <StudentHomePage/>
+            ):(
               <Navigate to="/"/>
             )}
           </ProtectedRoute>
