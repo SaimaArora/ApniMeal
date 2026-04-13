@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import API from "../services/api"
 import {AuthContext} from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 
 function LoginPage() {
     const { login } = useContext(AuthContext);
@@ -21,12 +21,12 @@ function LoginPage() {
             const res = await API.post("/users/login", form);
             login(res.data);
             if(res.data.user.role === "student") {
-                navigate("/student-dashboard");
+                navigate("/student-home");
             } else {
                 navigate("/cook-dashboard");
             }
         } catch(error) {
-            alert(error.response?.data?.message || "Something is wrong");
+            toast(error.response?.data?.message || "Something is wrong");
         }
     };
 

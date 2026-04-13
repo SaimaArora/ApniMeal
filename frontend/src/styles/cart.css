@@ -2,7 +2,7 @@
 .cart-container {
   display: flex;
   gap: 30px;
-  padding: 100px 40px;
+  padding: 30px 40px;
   background: #f4f4f4;
   min-height: 100vh;
 }

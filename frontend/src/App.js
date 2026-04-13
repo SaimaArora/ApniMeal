@@ -14,20 +14,33 @@ import StudentHomePage from "./pages/StudentHomePage";
 // COMPONENTS
 import Navbar from "./components/Navbar"; // Ensure Navbar.js has 'export default Navbar'
 import ProtectedRoute from "./components/ProtectedRoute";
+import {useLocation} from "react-router-dom";
 
 // CONTEXT
 import { AuthContext } from "./context/AuthContext";
 
-function App() {
-  const {user} = useContext(AuthContext);
-  const {loading} = useContext(AuthContext);
-
+function App(){
+  
+  const {user, loading} = useContext(AuthContext);
   if(loading) {
     return <p>Loading application...</p>;
   }
-  return (
+  return(
     <Router>
-      {user && <Navbar/>}
+      <AppContent user ={user}/>
+    </Router>
+  );
+}
+
+function AppContent({user}) {
+  const location = useLocation();
+
+  const hideNavbarRoutes = ["/", "/login", "/register"];
+  const shouldShowNavbar = user && !hideNavbarRoutes.includes(location.pathname);
+ 
+  return (
+    <>
+      {shouldShowNavbar && <Navbar/>}
       <Routes>
         
         <Route path="/" element={<HomePage/>}/>
@@ -80,7 +93,7 @@ function App() {
           </ProtectedRoute>
         }/>
       </Routes>
-    </Router>
+    </>
   );
 }
 export default App;

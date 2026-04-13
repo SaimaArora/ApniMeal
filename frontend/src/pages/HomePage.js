@@ -28,7 +28,7 @@ function HomePage() {
                 login(res.data);
                 toast.success("Login successful");
                 if(res.data.user.role === "student") {
-                    navigate("/student-dashboard");
+                    navigate("/student-home");
                 } else {
                     navigate("/cook-dashboard");
                 }
