@@ -12,7 +12,7 @@ const Navbar=()=>{
     const handleSearch =(e)=>{
         e.preventDefault();
         if(searchQuery.trim()) {
-            navigate(`/student-dashboard?q=${searchQuery}`);
+            navigate(`/student-dashboard?qr =${searchQuery}`);
             setSearchQuery("");
         }
     };

@@ -43,7 +43,7 @@
   border: none;
   cursor: pointer;
   border-radius: 6px;
-  background: #ffd600;
+  background: #fbf106;
   font-weight: 600;
 }
 
@@ -105,14 +105,14 @@
   width: 36px;
   height: 36px;
   border: none;
-  background: #ffd600;
+  background: #fbf106;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
 }
 
 .cart-btn:hover {
-  background: #f5c400;
+  background: #fbf106;
 }
 
 /* TEXT */

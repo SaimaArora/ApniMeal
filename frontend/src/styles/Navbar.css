@@ -10,7 +10,10 @@
 
   padding: 15px 40px;
   background: white;
-
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -42,7 +45,7 @@
 /* ACTIVE TAB */
 .nav-links a.active {
   color: black;
-  border-bottom: 3px solid #ffd600;
+  border-bottom: 3px solid #fbf106;
   padding-bottom: 4px;
 }
 
@@ -59,7 +62,7 @@
 }
 
 .search-form input:focus {
-  border-color: #ffd600;
+  border-color: #fbf106;
   box-shadow: 0px 0px 0px 3px rgba(255, 214, 0, 0.2);
 }
 
@@ -83,7 +86,7 @@
 
 .nav-actions a.active {
   color: black;
-  border-bottom: 3px solid #ffd600;
+  border-bottom: 3px solid #fbf106;
   padding-bottom: 4px;
 }
 
@@ -93,7 +96,7 @@
   border-radius: 8px;
   border: none;
 
-  background: #ffd600;
+  background: #fbf106;
   font-weight: 600;
   cursor: pointer;
 
@@ -101,7 +104,7 @@
 }
 
 .nav-actions button:hover {
-  background: #f5c400;
+  background: #fbf106;
   transform: scale(1.05);
 }
 

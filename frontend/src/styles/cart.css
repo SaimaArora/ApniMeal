@@ -143,7 +143,7 @@
 .checkout-btn {
   width: 100%;
   padding: 14px;
-  background: #ffd600;
+  background: #fbf106;
   border: none;
   font-weight: bold;
   cursor: pointer;
@@ -152,7 +152,7 @@
 }
 
 .checkout-btn:hover {
-  background: #f5c400;
+  background: #fbf106;
   transform: scale(1.03);
 }
 
@@ -169,15 +169,12 @@
 .empty-cart button {
   margin-top: 20px;
   padding: 10px 20px;
-  background: #ffd600;
+  background: #fbf106;
   border: none;
   cursor: pointer;
   border-radius: 6px;
 }
 
-/* ========================= */
-/* 🔥 MODAL (UPGRADED) */
-/* ========================= */
 
 .modal-overlay {
   position: fixed;
@@ -232,11 +229,11 @@
 
 /* CONFIRM BUTTON */
 .modal-buttons button:first-child {
-  background: #ffd600;
+  background: #fbf106;
 }
 
 .modal-buttons button:first-child:hover {
-  background: #f5c400;
+  background: #fbf106;
 }
 
 /* CANCEL BUTTON */

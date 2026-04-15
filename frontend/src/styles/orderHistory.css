@@ -15,7 +15,7 @@
 }
 
 .back-btn {
-  background: #ffd600;
+  background: #fbf106;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
@@ -127,7 +127,7 @@
 }
 
 .reorder-btn {
-  background: #ffd600;
+  background: #fbf106;
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
@@ -136,7 +136,7 @@
 }
 
 .reorder-btn:hover {
-  background: #f5c400;
+  background: #fbf106;
 }
 
 .cancel-btn {
@@ -186,7 +186,7 @@
   top: 45px;
   left: 0;
   height: 6px;
-  background: #ffd600;
+  background: #fbf106;
   border-radius: 10px;
   transition: width 0.4s ease;
 }
@@ -220,7 +220,7 @@
 
 /* STATES */
 .step.active .step-circle {
-  background: #ffd600;
+  background: #fbf106;
   transform: scale(1.15);
 }
 

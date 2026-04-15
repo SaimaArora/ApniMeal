@@ -28,7 +28,7 @@ body {
 }
 
 .home-left h1 span {
-  border-bottom: 4px solid #ffd600;
+  border-bottom: 4px solid #fbf106;
 }
 
 .subtitle {
@@ -85,7 +85,7 @@ body {
 /* ACTIVE TAB */
 .tab.active {
   color: black;
-  border-bottom: 3px solid #ffd600;
+  border-bottom: 3px solid #fbf106;
 }
 
 /* CONTENT AREA */
@@ -116,7 +116,7 @@ body {
 .primary-btn {
   width: 100%;
   padding: 12px;
-  background-color: #ffd600;
+  background-color: #fbf106;
   border: none;
   font-weight: bold;
   cursor: pointer;
@@ -125,7 +125,7 @@ body {
 }
 
 .primary-btn:hover {
-  background-color: #f5c400;
+  background-color: #fbf106;
   transform: scale(1.02);
 }
 

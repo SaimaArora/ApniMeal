@@ -75,7 +75,7 @@
 }
 
 .tabs .active {
-  background: #ffd600;
+  background: #fbf106;
 }
 
 /* CONTENT */
@@ -97,7 +97,7 @@
 .order-card button {
   margin-top: 10px;
   padding: 8px 12px;
-  background: #ffd600;
+  background: #fbf106;
   border: none;
   cursor: pointer;
   border-radius: 6px;
@@ -111,7 +111,7 @@
 }
 /* BUTTONS */
 .primary-btn {
-  background: #ffd600;
+  background: #fbf106;
   color: black;
   font-weight: 600;
   padding: 10px 20px;
@@ -121,7 +121,7 @@
 }
 
 .primary-btn:hover {
-  background: #e6c100;
+  background: #fbf106;
 }
 
 .secondary-btn {
@@ -137,7 +137,7 @@
   border: none;
   cursor: pointer;
   border-radius: 6px;
-  background: #ffd600;
+  background: #fbf106;
   font-weight: 600;
 }
 
@@ -178,7 +178,7 @@
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #ffd600;
+  border-color: #fbf106;
   outline: none;
   box-shadow: 0 0 0 2px rgba(255, 214, 0, 0.2);
 }
@@ -186,12 +186,12 @@
 .form-row {
   display: flex;
   gap: 15px;
-  flex-wrap: wrap; /* 🔥 prevents overflow */
+  flex-wrap: wrap;
 }
 
 .form-group {
   flex: 1;
-  min-width: 220px; /* 🔥 prevents shrinking too much */
+  min-width: 220px; 
 }
 
 .form-actions {
@@ -211,19 +211,19 @@
 .food-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* slightly bigger */
-  gap: 24px; /* 🔥 increase spacing */
+  gap: 24px; 
   margin-top: 10px;
 }
 
 /* FOOD CARD */
 .food-card {
   background: white;
-  padding: 20px; /* 🔥 more breathing room */
+  padding: 20px; 
   border-radius: 12px;
   box-shadow: 0px 6px 18px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 🔥 better internal spacing */
+  gap: 12px; 
   transition: 0.2s;
 }
 
@@ -265,7 +265,7 @@
 .food-desc {
   font-size: 13px;
   color: #666;
-  line-height: 1.4; /* 🔥 improves readability */
+  line-height: 1.4; 
 }
 
 /* META */
@@ -305,12 +305,12 @@
 
 /* BUTTON COLORS */
 .edit-btn {
-  background: #ffd600;
+  background: #fbf106;
   font-weight: 600;
 }
 
 .edit-btn:hover {
-  background: #e6c100;
+  background: #fbf106;
 }
 
 .delete-btn {
@@ -369,7 +369,7 @@
 .foods-section {
   display: flex;
   flex-direction: column;
-  gap: 50px; /* 🔥 more separation */
+  gap: 50px; 
 }
 
 /* EXTRA SPACE BELOW GRID */
@@ -382,7 +382,7 @@
   margin-top: 10px;
 }
 
-/* OPTIONAL: subtle divider effect */
+
 .food-form-card {
   border-top: 2px solid #eee;
   padding-top: 20px;

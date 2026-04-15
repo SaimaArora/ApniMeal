@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/StudentHomePage.css";
 import cartImg from "../assets/cart.png";
-import foodImg from "../assets/food.png";
-import ordersImg from "../assets/orders.png";
+import foodImg from "../assets/meal.png";      
+import ordersImg from "../assets/delivery.png"; 
 
 const StudentHomePage = () =>{
     const navigate = useNavigate();
