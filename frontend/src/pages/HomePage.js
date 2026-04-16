@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import API from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
@@ -8,7 +8,7 @@ import logo from "../assets/logo.png";
 
 
 function HomePage() {
-    const {login} = useContext(AuthContext); //intialiaze auth login
+    const {login, user, loading} = useContext(AuthContext); //intialiaze auth login
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [form, setForm] = useState({
@@ -17,6 +17,16 @@ function HomePage() {
         password:"",
         role:"student",
     });
+    useEffect(()=> {
+        if(!loading && user) {
+            if(user.user.role === "student") {
+                navigate("/student-home");
+            } else {
+                navigate("/cook-dashboard");
+            }
+        }
+    }, [user, loading, navigate]);
+
     const handleChange=(e)=>{
         setForm({...form, [e.target.name]:e.target.value });
     }
@@ -41,6 +51,7 @@ function HomePage() {
             toast.error(error.response?.data?.message || "Something went wrong");
         }
     };
+    if(loading) return null;
     return(
         <div className="home-container">
             <div className="logo-container">
@@ -99,8 +110,8 @@ function HomePage() {
 
                         {!isLogin && (
                             <select name="role" onChange={handleChange}>
-                            <option value="student">Student</option>
-                            <option value="cook">Cook</option>
+                                <option value="student">Student</option>
+                                <option value="cook">Cook</option>
                             </select>
                         )}
 

@@ -26,6 +26,17 @@ function CookDashboard(){
     const [orders, setOrders] = useState([]);
     const [search, setSearch] = useState("");
     const [activeTab, setActiveTab] = useState("incoming");
+
+    useEffect(()=>{
+        const openModal = () =>{
+            resetForm();
+            setEditingFood(null);
+            setIsModalOpen(true);
+        };
+        window.addEventListener("openAddFoodModal", openModal);
+        return ()=> window.removeEventListener("openAddFoodModal", openModal);
+    }, []);
+
     //handle form input
     const handleChange = (e)=>{
         const value = e.target.name === "isVeg"?e.target.value === "true":e.target.value;
@@ -43,11 +54,12 @@ function CookDashboard(){
             if(editingFood){
                 await API.put(`/foods/${editingFood._id}`, form);
                 toast.success("Food updated!");
-                setIsModalOpen(false);
             } else{
                 await API.post("/foods", form);
                 toast.success("Food added!");
             }
+            
+            setIsModalOpen(false);
             resetForm();
             fetchMyFoods();
         } catch(error){
@@ -182,17 +194,6 @@ console.log("REQUESTED:", status);
 
     return (
         <div className="cook-container">
-            <div className="navbar">
-                <img src={logo} alt="Logo" className="logo" />
-                <input 
-                    className="search-bar" 
-                    placeholder="Search orders..." 
-                    value={search} 
-                    onChange={(e) => setSearch(e.target.value)} 
-                />
-                <button onClick={logout} className="logout-btn">Logout</button>
-            </div>
-
             <h2 className="greeting">
                 Hi, {user?.user?.name} 👋
             </h2>
@@ -376,9 +377,12 @@ console.log("REQUESTED:", status);
                                 </form>
                             </div>
                         </div>
-
+                    </>
+                )}
+                </div>
+                
                         {/* ✅ MODAL OUTSIDE */}
-                        {isModalOpen && (
+                        {isModalOpen && editingFood && (
                             <div className="modal-overlay">
                                 <div className="modal">
                                     <h3>Edit Dish</h3>
@@ -451,9 +455,42 @@ console.log("REQUESTED:", status);
                                 </div>
                             </div>
                         )}
-                    </>
-                )}
-                </div>
+                        {isModalOpen && !editingFood && (
+                            <div className="modal-overlay">
+                                <div className="modal">
+                                    <h3>Add New Dish</h3>
+                                    <form onSubmit={handleSubmit} className="food-form vertical-form">
+                                        <div className="form-group">
+                                            <label>Dish Name</label>
+                                            <input name="title" value={form.title} onChange={handleChange} required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Description</label>
+                                            <input name="description" value={form.description} onChange={handleChange} required />
+                                        </div>                                     <div className="form-group">
+                                            <label>Price</label>
+                                            <input name="price" type="number" value={form.price} onChange={handleChange} required />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Category</label>
+                                            <select name="isVeg" value={form.isVeg} onChange={handleChange}>
+                                                <option value="true">Veg</option>
+                                                <option value="false">Non-Veg</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-actions">
+                                            <button className="primary-btn" type="submit">Add Food</button>
+                                            <button type="button" className="secondary-btn" onClick={()=>{
+                                                setIsModalOpen(false);
+                                                resetForm();
+                                            }}>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
         </div>
     );
 }

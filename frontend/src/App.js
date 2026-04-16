@@ -1,9 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
-
+import { useLocation } from "react-router-dom";
 // PAGES
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import CookDashboard from "./pages/CookDashboard";
 import CartPage from "./pages/CartPage";
@@ -14,7 +12,6 @@ import StudentHomePage from "./pages/StudentHomePage";
 // COMPONENTS
 import Navbar from "./components/Navbar"; // Ensure Navbar.js has 'export default Navbar'
 import ProtectedRoute from "./components/ProtectedRoute";
-import {useLocation} from "react-router-dom";
 
 // CONTEXT
 import { AuthContext } from "./context/AuthContext";
@@ -35,7 +32,7 @@ function App(){
 function AppContent({user}) {
   const location = useLocation();
 
-  const hideNavbarRoutes = ["/", "/login", "/register"];
+  const hideNavbarRoutes = ["/"];
   const shouldShowNavbar = user && !hideNavbarRoutes.includes(location.pathname);
  
   return (
@@ -44,8 +41,6 @@ function AppContent({user}) {
       <Routes>
         
         <Route path="/" element={<HomePage/>}/>
-        <Route path="/login" element={<LoginPage />}/>
-        <Route path="/register" element={<RegisterPage />}/>
         {/* Student dashboard */}
         <Route path="/student-dashboard" element={
           <ProtectedRoute>
@@ -92,6 +87,8 @@ function AppContent({user}) {
             )}
           </ProtectedRoute>
         }/>
+        {/* fallback */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );
